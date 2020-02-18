@@ -7,7 +7,7 @@ from Project.Config import *
 app = Flask(__name__)
 
 
-@app.route('/xvideos', method = ['POST','GET'])
+@app.route('/xvideos', methods = ['POST','GET'])
 def xvideos():
     if request.method == 'POST':
         payload = request.json
