@@ -40,7 +40,7 @@ def youtube():
             i=i+1
         i=0
         for a in box02:
-            if i >=41:
+            if i >=3:
                 print(a['href'])
                 clipUrl.append(a['href'])
                 break
@@ -48,7 +48,7 @@ def youtube():
         i=0
         title = []
         for h3 in box02:
-            if i ==42:
+            if i ==4:
                 print(h3.text)
                 title.append(h3.text)
                 # break
