@@ -6,7 +6,61 @@ from Project.Config import *
 
 app = Flask(__name__)
 
-@app.route('/pornhub', methods = ['POST','GET'])
+
+@app.route('/xvideos', method = ['POST','GET'])
+def xvideos():
+    if request.method == 'POST':
+        payload = request.json
+
+
+        Reply_token = payload['events'][0]['replyToken']
+        message = payload['events'][0]['message']['text']
+        
+        url = "https://www.xnxx.com/search/" + message
+        data = requests.get(url)
+        imgSrc = []
+        i = 1
+        linkTail = []
+        ii = 1
+        numberOfClips = 10
+        clipCounter = 0
+        soup = BeautifulSoup(data.text,'html.parser')
+        for div in soup.find_all('div',{"class":"thumb"}):
+            for getatag in div.find_all('a',href=True):
+                print(getatag['href'])
+                linkTail.append(getatag['href'])
+                if ii >= numberOfClips:
+                        break
+                ii = ii +1
+                for imgLink in getatag.find_all('img'):
+                    imgSrc.append(imgLink['src'])
+                    print(imgSrc)
+                    if i >= numberOfClips:
+                        break
+                    i = i+1
+                    clipCounter = clipCounter+ 1
+
+            # numberOfClips = numberOfClips + 1
+        i = 0
+        fullLink = []
+        for i in range(numberOfClips):
+            fullLink.append("https://www.xvideos.com" + linkTail[i])
+
+        ReplyMessage(Reply_token,fullLink,Channel_access_token,imgSrc,message,clipCounter)
+        return request.json, 200
+
+    elif request.method == 'GET' :
+        return 'this is method GET!!!' , 200
+
+    else:
+        abort(400)
+
+
+
+
+
+
+@app.route('/xnxx', methods = ['POST','GET'])
 def pornhub():
     if request.method == 'POST':
         payload = request.json
