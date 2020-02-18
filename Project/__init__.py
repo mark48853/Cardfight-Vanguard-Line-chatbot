@@ -7,8 +7,8 @@ from Project.Config import *
 app = Flask(__name__)
 
 
-@app.route('/xvideos', methods = ['POST','GET'])
-def xvideos():
+@app.route('/youtube', methods = ['POST','GET'])
+def youtube():
     if request.method == 'POST':
         payload = request.json
 
@@ -16,37 +16,47 @@ def xvideos():
         Reply_token = payload['events'][0]['replyToken']
         message = payload['events'][0]['message']['text']
         
-        url = "https://www.xnxx.com/search/" + message
-        data = requests.get(url)
-        imgSrc = []
-        i = 1
-        linkTail = []
-        ii = 1
-        numberOfClips = 10
-        clipCounter = 0
+        shouldYoutube = message[0:7]
+        print(shouldYoutube)
+        searchWord = message[8:len(message)]
+        print(searchWord)
+        if youtube or Youtube in shouldYoutube :
+            url = "https://www.youtube.com/results?search_query=" + searchWord
+            data = requests.get(url)
         soup = BeautifulSoup(data.text,'html.parser')
-        for div in soup.find_all('div',{"class":"thumb"}):
-            for getatag in div.find_all('a',href=True):
-                print(getatag['href'])
-                linkTail.append(getatag['href'])
-                if ii >= numberOfClips:
-                        break
-                ii = ii +1
-                for imgLink in getatag.find_all('img'):
-                    imgSrc.append(imgLink['src'])
-                    print(imgSrc)
-                    if i >= numberOfClips:
-                        break
-                    i = i+1
-                    clipCounter = clipCounter+ 1
+        box = soup.find_all("img")
+        box02 = soup.find_all("a")
+        box03 = soup.find_all("h3")
+        imgUrl = []
+        clipUrl = []
+        i=0
+        for image in box:
+            
+            if i >= 6 and i < 10 :
+                print(image['src'])
+                imgUrl.append(image['src'])
+            if i == 10:
+                break
+            i=i+1
+        i=0
+        for a in box02:
+            if i >=41:
+                print(a['href'])
+                clipUrl.append(a['href'])
+                break
+            i=i+1
+        i=0
+        title = []
+        for h3 in box02:
+            if i ==42:
+                print(h3.text)
+                title.append(h3.text)
+                # break
+            i=i+1
 
-            # numberOfClips = numberOfClips + 1
-        i = 0
-        fullLink = []
-        for i in range(numberOfClips):
-            fullLink.append("https://www.xvideos.com" + linkTail[i])
 
-        ReplyMessage(Reply_token,fullLink,Channel_access_token,imgSrc,message,clipCounter)
+        REPLYMSG = "soup"
+        ReplyMessage(Reply_token, REPLYMSG, Channel_access_token, searchWord, imgUrl, clipUrl, title)
         return request.json, 200
 
     elif request.method == 'GET' :
@@ -60,162 +70,71 @@ def xvideos():
 
 
 
-@app.route('/xnxx', methods = ['POST','GET'])
-def pornhub():
-    if request.method == 'POST':
-        payload = request.json
-
-
-        Reply_token = payload['events'][0]['replyToken']
-        message = payload['events'][0]['message']['text']
-        
-        url = "https://www.xnxx.com/search/" + message
-        data = requests.get(url)
-        imgSrc = []
-        i = 1
-        linkTail = []
-        ii = 1
-        numberOfClips = 10
-        clipCounter = 0
-        soup = BeautifulSoup(data.text,'html.parser')
-        for div in soup.find_all('div',{"class":"thumb"}):
-            for getatag in div.find_all('a',href=True):
-                print(getatag['href'])
-                linkTail.append(getatag['href'])
-                if ii >= numberOfClips:
-                        break
-                ii = ii +1
-                for imgLink in getatag.find_all('img'):
-                    imgSrc.append(imgLink['data-src'])
-                    print(imgSrc)
-                    if i >= numberOfClips:
-                        break
-                    i = i+1
-                    clipCounter = clipCounter+ 1
-
-            # numberOfClips = numberOfClips + 1
-        i = 0
-        fullLink = []
-        for i in range(numberOfClips):
-            fullLink.append("https://xnxx.com" + linkTail[i])
-
-        ReplyMessage(Reply_token,fullLink,Channel_access_token,imgSrc,message,clipCounter)
-        return request.json, 200
-
-    elif request.method == 'GET' :
-        return 'this is method GET!!!' , 200
-
-    else:
-        abort(400)
-
-
-def ReplyMessage(Reply_token, Link, Line_Acees_Token, imgSrc, keyWord, count):
+def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, title):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
-    Authorization = 'Bearer {}'.format('iM0cqxFMtiLnAGpI4g9bZjtssFBl0bkL1qXeHAMkdiGOldPbVPDg6pE+rb4JSQI6SJbd8blc4PyB7zSNRB1YDUweSz00AACauvGc2S8h4KtktH7gyBTEhEKXeSXfcNP5mYqqEDl9A9hRHyl91+SGRQdB04t89/1O/w1cDnyilFU=')
+    Authorization = 'Bearer {}'.format('ng0hDFDnoKgBkrKjG+hbQ0UiOLTkrARJiwXypO7PeX3RkLuF3KLg20ShAyCxKAxlYQdrpjRQxU0TZA/0Fo8ohwFdgnjjRvGaCq6XyxHGQ/hZ5ipGqACEnAFO1x476zuKZQHSsYQ/VANDwb/oP0os7wdB04t89/1O/w1cDnyilFU=')
     print(Authorization)
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': Authorization
     }
-    if count >= 9 :
-        data = {
+    data = {
         "replyToken":Reply_token,
         "messages":[{
   "type": "flex",
-  "altText": "NSFW",
+  "altText": title[0][0:20],
   "contents": {
-    "type": "carousel",
-    "contents": [
-        #start first flex here
-        content(imgSrc[0],Link[0],keyWord),
-        content(imgSrc[1],Link[1],keyWord),
-        content(imgSrc[2],Link[2],keyWord),
-        content(imgSrc[3],Link[3],keyWord),
-        content(imgSrc[4],Link[4],keyWord),
-        content(imgSrc[5],Link[5],keyWord),
-        content(imgSrc[6],Link[6],keyWord),
-        content(imgSrc[7],Link[7],keyWord),
-        content(imgSrc[8],Link[8],keyWord)
-
-    ]
+    "type": "bubble",
+    "header": {
+      "type": "box",
+      "layout": "vertical",
+      "flex": 0,
+      "contents": [
+        {
+          "type": "text",
+          "text": title[0],
+          "size": "xxl",
+          "color": "#E82525",
+          "wrap": True
+        }
+      ]
+    },
+    "hero": {
+      "type": "image",
+      "url": imgUrl[0],
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "label": "Action",
+        "uri": "https://www.youtube.com"+clipUrl[0]
+      }
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "spacer",
+          "size": "lg"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "uri",
+            "label": "WATCH",
+            "uri": "https://www.youtube.com"+clipUrl[0]
+          },
+          "color": "#E82525",
+          "style": "primary"
+        }
+      ]
+    }
   }
 }]
     }
-    elif count >=7 :
-                data = {
-        "replyToken":Reply_token,
-        "messages":[{
-  "type": "flex",
-  "altText": "NSFW",
-  "contents": {
-    "type": "carousel",
-    "contents": [
-        #start first flex here
-        content(imgSrc[0],Link[0],keyWord),
-        content(imgSrc[1],Link[1],keyWord),
-        content(imgSrc[2],Link[2],keyWord),
-        content(imgSrc[3],Link[3],keyWord),
-        content(imgSrc[4],Link[4],keyWord),
-        content(imgSrc[5],Link[5],keyWord),
-        content(imgSrc[6],Link[6],keyWord)
-
-    ]
-  }
-}]
-    }
-    elif count >=5 :
-            data = {
-        "replyToken":Reply_token,
-        "messages":[{
-  "type": "flex",
-  "altText": "NSFW",
-  "contents": {
-    "type": "carousel",
-    "contents": [
-        #start first flex here
-        content(imgSrc[0],Link[0],keyWord),
-        content(imgSrc[1],Link[1],keyWord),
-        content(imgSrc[2],Link[2],keyWord),
-        content(imgSrc[3],Link[3],keyWord),
-        content(imgSrc[4],Link[4],keyWord)
-
-    ]
-  }
-}]
-    }
-    elif count >=3 :
-            data = {
-        "replyToken":Reply_token,
-        "messages":[{
-  "type": "flex",
-  "altText": "NSFW",
-  "contents": {
-    "type": "carousel",
-    "contents": [
-        #start first flex here
-        content(imgSrc[0],Link[0],keyWord),
-        content(imgSrc[1],Link[1],keyWord),
-        content(imgSrc[2],Link[2],keyWord)
-
-    ]
-  }
-}]
-    }
-    else :
-        data = {
-        "replyToken":Reply_token,
-        "messages":[{
-  "type": "flex",
-  "altText": "NSFW",
-  "contents": {
-    "type": "carousel",
-    "contents": [
-        #start first flex here
-        content(imgSrc[0],Link[0],keyWord)
-    ]
-  }
-}]
-    }
+   
 
 
 
