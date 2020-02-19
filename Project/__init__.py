@@ -20,7 +20,7 @@ def youtube():
         print(shouldYoutube)
         searchWord = message[8:len(message)]
         print(searchWord)
-        if youtube or Youtube in shouldYoutube :
+        if "youtube" or "Youtube" in shouldYoutube :
             url = "https://www.youtube.com/results?search_query=" + searchWord
             data = requests.get(url)
         soup = BeautifulSoup(data.text,'html.parser')
