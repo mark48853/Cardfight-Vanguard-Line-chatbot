@@ -16,11 +16,11 @@ def youtube():
         Reply_token = payload['events'][0]['replyToken']
         message = payload['events'][0]['message']['text']
         
-        shouldYoutube = message[0:7]
-        print(shouldYoutube)
+        shouldYt = message[0:7]
+        print(shouldYt)
         searchWord = message[8:len(message)]
         print(searchWord)
-        if "youtube" or "Youtube" in shouldYoutube :
+        if "youtube" in shouldYt :
             url = "https://www.youtube.com/results?search_query=" + searchWord
             data = requests.get(url)
         soup = BeautifulSoup(data.text,'html.parser')
