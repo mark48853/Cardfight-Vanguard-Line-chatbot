@@ -24,39 +24,29 @@ def youtube():
             url = "https://www.youtube.com/results?search_query=" + searchWord
             data = requests.get(url)
         soup = BeautifulSoup(data.text,'html.parser')
-        box = soup.find_all("img")
-        box02 = soup.find_all("a")
+        box = soup.find_all("img",{"width":"246"})
+        box02 = soup.find_all("a",{"class":"yt-uix-tile-link"})
         box03 = soup.find_all("h3")
         imgUrl = []
         clipUrl = []
         i=0
         for image in box:
-            
-            if i >= 6 and i < 10 :
-                print(image['src'])
-                imgUrl.append(image['src'])
-            if i == 10:
-                break
-            i=i+1
-        i=0
-        for a in box02:
-            if i >=3:
-                print(a['href'])
-                clipUrl.append(a['href'])
-                break
-            i=i+1
-        i=0
+
+              print("za imagi izz:   "+image['src'])
+              imgUrl.append(image['src'])
         title = []
-        for h3 in box02:
-            if i ==4:
-                print(h3.text)
-                title.append(h3.text)
-                # break
-            i=i+1
+        for a in box02:
+            print("the url is :     "+a['href'])
+            clipUrl.append(a['href'])
+            print("theee tiiitleeee isss"+a['title'])
+            title.append(a['title'])
+            break
+        i=0
+
 
 
         REPLYMSG = "soup"
-        ReplyMessage(Reply_token, REPLYMSG, Channel_access_token, searchWord, imgUrl, clipUrl, title, box02)
+        ReplyMessage(Reply_token, REPLYMSG, Channel_access_token, searchWord, imgUrl, clipUrl, title)
         return request.json, 200
 
     elif request.method == 'GET' :
@@ -70,7 +60,7 @@ def youtube():
 
 
 
-def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, title, box02):
+def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, title):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
     Authorization = 'Bearer {}'.format('ng0hDFDnoKgBkrKjG+hbQ0UiOLTkrARJiwXypO7PeX3RkLuF3KLg20ShAyCxKAxlYQdrpjRQxU0TZA/0Fo8ohwFdgnjjRvGaCq6XyxHGQ/hZ5ipGqACEnAFO1x476zuKZQHSsYQ/VANDwb/oP0os7wdB04t89/1O/w1cDnyilFU=')
     print(Authorization)
@@ -80,10 +70,59 @@ def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, t
     }
     data = {
         "replyToken":Reply_token,
-        "messages":[
+        "messages":[{
+  "type": "flex",
+  "altText": title[0][0:20],
+  "contents": {
+    "type": "bubble",
+    "header": {
+      "type": "box",
+      "layout": "vertical",
+      "flex": 0,
+      "contents": [
+        {
           "type": "text",
-          "text": box02
-        ]
+          "text": title[0],
+          "size": "xxl",
+          "color": "#E82525",
+          "wrap": True
+        }
+      ]
+    },
+    "hero": {
+      "type": "image",
+      "url": imgUrl[0],
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "label": "Action",
+        "uri": "https://www.youtube.com"+clipUrl[0]
+      }
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "spacer",
+          "size": "lg"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "uri",
+            "label": "WATCH",
+            "uri": "https://www.youtube.com"+clipUrl[0]
+          },
+          "color": "#E82525",
+          "style": "primary"
+        }
+      ]
+    }
+  }
+}]
     }
    
 
