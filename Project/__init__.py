@@ -56,7 +56,7 @@ def youtube():
 
 
         REPLYMSG = "soup"
-        ReplyMessage(Reply_token, REPLYMSG, Channel_access_token, searchWord, imgUrl, clipUrl, title)
+        ReplyMessage(Reply_token, REPLYMSG, Channel_access_token, searchWord, imgUrl, clipUrl, title, box02)
         return request.json, 200
 
     elif request.method == 'GET' :
@@ -70,7 +70,7 @@ def youtube():
 
 
 
-def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, title):
+def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, title, box02):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
     Authorization = 'Bearer {}'.format('ng0hDFDnoKgBkrKjG+hbQ0UiOLTkrARJiwXypO7PeX3RkLuF3KLg20ShAyCxKAxlYQdrpjRQxU0TZA/0Fo8ohwFdgnjjRvGaCq6XyxHGQ/hZ5ipGqACEnAFO1x476zuKZQHSsYQ/VANDwb/oP0os7wdB04t89/1O/w1cDnyilFU=')
     print(Authorization)
@@ -80,59 +80,10 @@ def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, t
     }
     data = {
         "replyToken":Reply_token,
-        "messages":[{
-  "type": "flex",
-  "altText": title[0][0:20],
-  "contents": {
-    "type": "bubble",
-    "header": {
-      "type": "box",
-      "layout": "vertical",
-      "flex": 0,
-      "contents": [
-        {
+        "messages":[
           "type": "text",
-          "text": title[0],
-          "size": "xxl",
-          "color": "#E82525",
-          "wrap": True
-        }
-      ]
-    },
-    "hero": {
-      "type": "image",
-      "url": imgUrl[0],
-      "size": "full",
-      "aspectRatio": "20:13",
-      "aspectMode": "cover",
-      "action": {
-        "type": "uri",
-        "label": "Action",
-        "uri": "https://www.youtube.com"+clipUrl[0]
-      }
-    },
-    "footer": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "spacer",
-          "size": "lg"
-        },
-        {
-          "type": "button",
-          "action": {
-            "type": "uri",
-            "label": "WATCH",
-            "uri": "https://www.youtube.com"+clipUrl[0]
-          },
-          "color": "#E82525",
-          "style": "primary"
-        }
-      ]
-    }
-  }
-}]
+          "text": box02
+        ]
     }
    
 
