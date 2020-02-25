@@ -32,6 +32,7 @@ def anime():
           titleList = []
           linkList = []
           endedOrNot = []
+          btnColor = []
           for image in box:
             print(image['src'])
             imageList.append(image['src'])
@@ -46,6 +47,12 @@ def anime():
           for span in spantag:
             print(span.text)
             endedOrNot.append(span.text)
+            if "ยังไม่จบ" in span.text:
+              btnColor.append("#22f53e")
+            if "จบแล้ว" in span.text:
+              btnColor.append("#de3721")
+            else:
+              btnColor.append("#7c19fc")
           ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
 
         elif "หา" in searchOrNot[0:2]:
@@ -63,6 +70,7 @@ def anime():
           titleList = []
           linkList = []
           endedOrNot = []
+          btnColor = []
           for image in box:
             print(image['src'])
             imageList.append(image['src'])
@@ -77,6 +85,12 @@ def anime():
           for span in spantag:
             print(span.text)
             endedOrNot.append(span.text)
+            if "ยังไม่จบ" in span.text:
+              btnColor.append("#22f53e")
+            if "จบแล้ว" in span.text:
+              btnColor.append("#de3721")
+            else:
+              btnColor.append("#7c19fc")
           ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
 
         else if "แนะนำ" in message:
@@ -92,6 +106,7 @@ def anime():
           titleList = []
           linkList = []
           endedOrNot = []
+          btnColor = []
           for image in box:
             print(image['src'])
             imageList.append(image['src'])
@@ -106,7 +121,15 @@ def anime():
           for span in spantag:
             print(span.text)
             endedOrNot.append(span.text)
-          ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
+            if "ยังไม่จบ" in span.text:
+              btnColor.append("#22f53e")
+            if "จบแล้ว" in span.text:
+              btnColor.append("#de3721")
+            else:
+              btnColor.append("#7c19fc")
+
+
+          ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot, btnColor)
 
 
 
@@ -124,7 +147,7 @@ def anime():
 
 
 
-def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, link, ended):
+def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, link, ended, btn):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
     Authorization = 'Bearer {}'.format('PuM0ErN/81YoFSbLiHj07P+Y+IpW5eVZOXklqyB96MJn+kOrpRgmDRH2C0xgSP1ky7DDnpJ10g2wPds29FsGC2b3tvfV+R9vf38qZOBxfXqkIMSCxT29SzhusM+bf1+vq21Va3au1f23whbFRveB+AdB04t89/1O/w1cDnyilFU=')
     print(Authorization)
@@ -132,7 +155,7 @@ def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, l
     content = []
     i = 0
     for i in range(len(imgSrc)):
-      content.append(flex(imgSrc[i],title[i],link[i],ended[i]))
+      content.append(flex(imgSrc[i],title[i],link[i],ended[i],btn[i]))
       if i == 9:
         break
     headers = {

@@ -1,4 +1,4 @@
-def flex(imgSrc,title,link,ended):
+def flex(imgSrc,title,link,ended,btn):
     return {
         "type": "bubble",
         "hero": {
@@ -72,7 +72,7 @@ def flex(imgSrc,title,link,ended):
                 "label": "ดูเรื่องนี้",
                 "uri": link
               },
-              "color": "#20AC32",
+              "color": btn,
               "height": "md",
               "style": "primary",
               "gravity": "top"
