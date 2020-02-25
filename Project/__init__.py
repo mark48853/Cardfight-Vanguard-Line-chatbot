@@ -89,7 +89,7 @@ def anime():
               btnColor.append("#22f53e")
             if "จบแล้ว" in span.text:
               btnColor.append("#de3721")
-            else:
+            elif "Movie" in span.text:
               btnColor.append("#7c19fc")
           ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
 
