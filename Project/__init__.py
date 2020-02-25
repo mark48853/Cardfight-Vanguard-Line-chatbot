@@ -93,7 +93,7 @@ def anime():
               btnColor.append("#7c19fc")
           ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
 
-        else if "แนะนำ" in message:
+        elif "แนะนำ" in message:
           url = "https://www.anime-sugoi.com/catalog/0/"
           data = requests.get(url)
           soup = BeautifulSoup(data.text,'html.parser')
