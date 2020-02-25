@@ -47,7 +47,67 @@ def anime():
             print(span.text)
             endedOrNot.append(span.text)
           ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
- 
+
+        elif "หา" in searchOrNot[0:2]:
+          searchWord = message[3:len(message)]
+          print(searchWord)
+          url = "https://www.anime-sugoi.com/index.php?search=" + searchWord
+          data = requests.get(url)
+          soup = BeautifulSoup(data.text,'html.parser')
+          divv = soup.find("div",{"class":"panel-body"})
+          atag = divv.find_all("a")
+          spantag = divv.find_all("span",{"class":"label-danger"})
+          box = divv.find_all("img",{"class":"img-thumbnail"})
+          print(box)
+          imageList = []
+          titleList = []
+          linkList = []
+          endedOrNot = []
+          for image in box:
+            print(image['src'])
+            imageList.append(image['src'])
+            print(image['title'])
+            titleList.append(image['title'])
+          z=2
+          for a in atag:
+            if z % 2 == 0:
+              linkList.append(a['href'])
+              print(a['href'])
+            z = z + 1
+          for span in spantag:
+            print(span.text)
+            endedOrNot.append(span.text)
+          ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
+
+        elif "แนะนำ" or "เเนะนำ" in message and len(message) < 30:
+          url = "https://www.anime-sugoi.com/catalog/0/"
+          data = requests.get(url)
+          soup = BeautifulSoup(data.text,'html.parser')
+          divv = soup.find("div",{"class":"panel-body"})
+          atag = divv.find_all("a")
+          spantag = divv.find_all("span",{"class":"label-danger"})
+          box = divv.find_all("img",{"class":"img-thumbnail"})
+          print(box)
+          imageList = []
+          titleList = []
+          linkList = []
+          endedOrNot = []
+          for image in box:
+            print(image['src'])
+            imageList.append(image['src'])
+            print(image['title'])
+            titleList.append(image['title'])
+          z=2
+          for a in atag:
+            if z % 2 == 0:
+              linkList.append(a['href'])
+              print(a['href'])
+            z = z + 1
+          for span in spantag:
+            print(span.text)
+            endedOrNot.append(span.text)
+          ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
+
 
 
 
