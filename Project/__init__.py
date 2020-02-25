@@ -2,54 +2,55 @@ import requests
 from flask import Flask, request, abort
 from bs4 import BeautifulSoup
 import json
+from Project.flex import *
 from Project.Config import *
 
 app = Flask(__name__)
 
 
-@app.route('/youtube', methods = ['POST','GET'])
-def youtube():
+@app.route('/anime', methods = ['POST','GET'])
+def anime():
     if request.method == 'POST':
         payload = request.json
 
-
         Reply_token = payload['events'][0]['replyToken']
         message = payload['events'][0]['message']['text']
-        
-        shouldYt = message[0:7]
-        print(shouldYt)
-        searchWord = message[8:len(message)]
-        print(searchWord)
-        if "outube" in shouldYt :
-            if "youtube" or "/watch?" in searchWord:
-              searchWord = searchWord[len(searchWord)-12:len(searchWord)]
-              print (searchWord)
-            url = "https://www.youtube.com/results?search_query=" + searchWord
-            data = requests.get(url)
-        soup = BeautifulSoup(data.text,'html.parser')
-        box = soup.find_all("img",{"width":"246"})
-        box02 = soup.find_all("a",{"class":"yt-uix-tile-link"})
-        box03 = soup.find_all("h3")
-        imgUrl = []
-        clipUrl = []
-        i=0
-        for image in box:
+        searchOrNot = message[0:6].lower()
+        print(searchOrNot)
+        if "search" in searchOrNot:
+          searchWord = message[7:len(message)]
+          print(searchWord)
+          url = "https://www.anime-sugoi.com/index.php?search=" + searchWord
+          data = requests.get(url)
+          soup = BeautifulSoup(data.text,'html.parser')
+          divv = soup.find("div",{"class":"panel-body"})
+          atag = divv.find_all("a")
+          spantag = divv.find_all("span",{"class":"label-danger"})
+          box = divv.find_all("img",{"class":"img-thumbnail"})
+          print(box)
+          imageList = []
+          titleList = []
+          linkList = []
+          endedOrNot = []
+          for image in box:
+            print(image['src'])
+            imageList.append(image['src'])
+            print(image['title'])
+            titleList.append(image['title'])
+          z=2
+          for a in atag:
+            if z % 2 == 0:
+              linkList.append(a['href'])
+              print(a['href'])
+            z = z + 1
+          for span in spantag:
+            print(span.text)
+            endedOrNot.append(span.text)
+          ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
+ 
 
-              print("za imagi izz:   "+image['src'])
-              imgUrl.append(image['src'])
-        title = []
-        for a in box02:
-            print("the url is :     "+a['href'])
-            clipUrl.append(a['href'])
-            print("theee tiiitleeee isss"+a['title'])
-            title.append(a['title'])
-            break
-        i=0
 
 
-
-        REPLYMSG = "soup"
-        ReplyMessage(Reply_token, REPLYMSG, Channel_access_token, searchWord, imgUrl, clipUrl, title)
         return request.json, 200
 
     elif request.method == 'GET' :
@@ -63,10 +64,15 @@ def youtube():
 
 
 
-def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, title):
+def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, link, ended):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
-    Authorization = 'Bearer {}'.format('ng0hDFDnoKgBkrKjG+hbQ0UiOLTkrARJiwXypO7PeX3RkLuF3KLg20ShAyCxKAxlYQdrpjRQxU0TZA/0Fo8ohwFdgnjjRvGaCq6XyxHGQ/hZ5ipGqACEnAFO1x476zuKZQHSsYQ/VANDwb/oP0os7wdB04t89/1O/w1cDnyilFU=')
+    Authorization = 'Bearer {}'.format('PuM0ErN/81YoFSbLiHj07P+Y+IpW5eVZOXklqyB96MJn+kOrpRgmDRH2C0xgSP1ky7DDnpJ10g2wPds29FsGC2b3tvfV+R9vf38qZOBxfXqkIMSCxT29SzhusM+bf1+vq21Va3au1f23whbFRveB+AdB04t89/1O/w1cDnyilFU=')
     print(Authorization)
+    print(len(imgSrc))
+    content = []
+    i = 0
+    for i in range(len(imgSrc)):
+      content.append(flex(imgSrc[i],title[i],link[i],ended[i]))
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': Authorization
@@ -75,61 +81,17 @@ def ReplyMessage(Reply_token, message, Line_Access_Token, sw, imgUrl, clipUrl, t
         "replyToken":Reply_token,
         "messages":[{
   "type": "flex",
-  "altText": title[0][0:20],
+  "altText": "Flex Message",
   "contents": {
-    "type": "bubble",
-    "header": {
-      "type": "box",
-      "layout": "vertical",
-      "flex": 0,
-      "contents": [
-        {
-          "type": "text",
-          "text": title[0],
-          "size": "xxl",
-          "color": "#E82525",
-          "wrap": True
-        }
-      ]
-    },
-    "hero": {
-      "type": "image",
-      "url": imgUrl[0],
-      "size": "full",
-      "aspectRatio": "20:13",
-      "aspectMode": "cover",
-      "action": {
-        "type": "uri",
-        "label": "Action",
-        "uri": "https://www.youtube.com"+clipUrl[0]
-      }
-    },
-    "footer": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "spacer",
-          "size": "lg"
-        },
-        {
-          "type": "button",
-          "action": {
-            "type": "uri",
-            "label": "WATCH",
-            "uri": "https://www.youtube.com"+clipUrl[0]
-          },
-          "color": "#E82525",
-          "style": "primary"
-        }
-      ]
-    }
+    "type": "carousel",
+    "contents": 
+          content
+        
   }
-}]
-    }
-   
-
-
+  }]
+}
+    
+                    
 
     data = json.dumps(data) ## dump dict >> Json Object
     requests.post(LINE_API, headers=headers, data=data) 
