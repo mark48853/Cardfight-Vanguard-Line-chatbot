@@ -73,6 +73,8 @@ def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, l
     i = 0
     for i in range(len(imgSrc)):
       content.append(flex(imgSrc[i],title[i],link[i],ended[i]))
+      if i == 10:
+        break
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': Authorization
@@ -81,7 +83,7 @@ def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, l
         "replyToken":Reply_token,
         "messages":[{
   "type": "flex",
-  "altText": "Flex Message",
+  "altText": "ผลการค้นหา",
   "contents": {
     "type": "carousel",
     "contents": 
