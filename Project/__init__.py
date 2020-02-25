@@ -79,7 +79,7 @@ def anime():
             endedOrNot.append(span.text)
           ReplyMessageSearch (Reply_token, message, Channel_access_token, imageList, titleList, linkList, endedOrNot)
 
-        elif "แนะนำ" or "เเนะนำ" in message and len(message) < 30:
+        else if "แนะนำ" in message:
           url = "https://www.anime-sugoi.com/catalog/0/"
           data = requests.get(url)
           soup = BeautifulSoup(data.text,'html.parser')
