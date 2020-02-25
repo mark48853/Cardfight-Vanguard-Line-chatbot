@@ -73,7 +73,7 @@ def ReplyMessageSearch(Reply_token, message, Line_Access_Token, imgSrc, title, l
     i = 0
     for i in range(len(imgSrc)):
       content.append(flex(imgSrc[i],title[i],link[i],ended[i]))
-      if i == 10:
+      if i == 9:
         break
     headers = {
         'Content-Type': 'application/json; charset=UTF-8',
