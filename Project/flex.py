@@ -1,82 +1,53 @@
-def flex(imgSrc,title,link,ended,btn):
+def flex(cardSkill,cardImgSrc,cardName):
     return {
-        "type": "bubble",
-        "hero": {
-          "type": "image",
-          "url": imgSrc,
-          "flex": 10,
-          "align": "center",
-          "size": "full",
-          "aspectRatio": "3:4",
-          "aspectMode": "cover",
-          "action": {
-            "type": "uri",
-            "label": "Action",
-            "uri": link
-          }
+  "type": "flex",
+  "altText": "หนิวหนิวหนิวหนิวหนิว",
+  "contents": {
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "url": cardImgSrc,
+      "size": "full",
+      "aspectRatio": "3.1:4.6",
+      "aspectMode": "cover",
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": cardName,
+          "size": "xl",
+          "weight": "bold",
+          "color": "#9FBE02",
+          "wrap": True
         },
-        "body": {
+        {
           "type": "box",
           "layout": "vertical",
-          "spacing": "md",
-          "action": {
-            "type": "uri",
-            "label": "Action",
-            "uri": link
-          },
+          "spacing": "sm",
+          "margin": "lg",
           "contents": [
             {
-              "type": "text",
-              "text": title,
-              "flex": 6,
-              "size": "xl",
-              "weight": "bold",
-              "color": "#17160D",
-              "wrap": True
-            },
-            {
               "type": "box",
-              "layout": "vertical",
+              "layout": "baseline",
               "spacing": "sm",
               "contents": [
                 {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": ended,
-                      "flex": 0,
-                      "margin": "sm",
-                      "weight": "bold",
-                      "color": "#DE3D3D"
-                    }
-                  ]
+                  "type": "text",
+                  "text": cardSkill,
+                  "flex": 5,
+                  "size": "sm",
+                  "color": "#666666",
+                  "wrap": True
                 }
               ]
             }
           ]
-        },
-        "footer": {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "spacer",
-              "size": "xxl"
-            },
-            {
-              "type": "button",
-              "action": {
-                "type": "uri",
-                "label": "ดูเรื่องนี้",
-                "uri": link
-              },
-              "color": btn,
-              "height": "md",
-              "style": "primary",
-              "gravity": "top"
-            }
-          ]
         }
-      }
+      ]
+    }
+  }
+}
+            

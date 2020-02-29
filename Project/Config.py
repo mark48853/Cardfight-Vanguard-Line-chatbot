@@ -1,2 +1,2 @@
-Channel_secret= '70009c5f0bb61cd39d265946ebecedf7'
-Channel_access_token = 'PuM0ErN/81YoFSbLiHj07P+Y+IpW5eVZOXklqyB96MJn+kOrpRgmDRH2C0xgSP1ky7DDnpJ10g2wPds29FsGC2b3tvfV+R9vf38qZOBxfXqkIMSCxT29SzhusM+bf1+vq21Va3au1f23whbFRveB+AdB04t89/1O/w1cDnyilFU='
+Channel_secret= '8788b369c2789be7ad38b4dc43e149fd'
+Channel_access_token = 'h6Wj0e83MDR6snc4Dt/vqf8rnNzMHAzxaWPtWytmL0BB9B076iLqZQ4AFd3ujpT+hnIDXT1lY1I9MNPlqK3IvEv0NM9ok9LUQg2awtfQ+CNOfLpOQzN1bkO1QWEriz1nOYcFlxEHf3ZDzIeAvigVtAdB04t89/1O/w1cDnyilFU='
