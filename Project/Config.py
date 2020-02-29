@@ -1,2 +1,2 @@
-Channel_secret= '8788b369c2789be7ad38b4dc43e149fd'
-Channel_access_token = 'h6Wj0e83MDR6snc4Dt/vqf8rnNzMHAzxaWPtWytmL0BB9B076iLqZQ4AFd3ujpT+hnIDXT1lY1I9MNPlqK3IvEv0NM9ok9LUQg2awtfQ+CNOfLpOQzN1bkO1QWEriz1nOYcFlxEHf3ZDzIeAvigVtAdB04t89/1O/w1cDnyilFU='
+Channel_secret= 'YOUR SECRET'
+Channel_access_token = 'YOUR TOKEN'

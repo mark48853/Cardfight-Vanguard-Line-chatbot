@@ -1,7 +1,7 @@
 def flex(cardSkill,cardImgSrc,cardName):
     return {
   "type": "flex",
-  "altText": "หนิวหนิวหนิวหนิวหนิว",
+  "altText": "Searching Result",
   "contents": {
     "type": "bubble",
     "hero": {
